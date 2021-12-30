@@ -1,0 +1,33 @@
+import Player from "./playerClass.js"
+import Item from "./itemClass.js"
+let canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");canvas.height=window.innerHeight;canvas.width=window.innerWidth;ctx.beginPath();ctx.stroke();let inverseScale=120;let getRandomInt=(a,b)=>{let rand=Math.random()*100;let range=b-a;let num=(range/100)*rand;return a+Math.ceil(num)}
+let debugRender=()=>{for(let i=0;i<inverseScale;i++){ctx.beginPath();ctx.moveTo((canvas.width/inverseScale)*i,0)
+ctx.lineTo((canvas.width/inverseScale)*i,canvas.height)
+ctx.stroke()}
+for(let i=0;i<inverseScale;i++){ctx.beginPath();ctx.moveTo(0,(canvas.width/inverseScale)*i)
+ctx.lineTo(canvas.width,(canvas.width/inverseScale)*i)
+ctx.stroke()}}
+let collisionDetect=(rect1,rect2)=>{let collisions=0;let collision=!1;for(let i=0;i<rect2.length;i++){if(rect1.x<rect2[i].x+rect2[i].w&&rect1.x+rect1.w>rect2[i].x&&rect1.y<rect2[i].y+rect2[i].h&&rect1.h+rect1.y>rect2[i].y){collisions++}else{}}
+if(collisions>0){collision=!0}
+return collision}
+document.addEventListener("keydown",(e)=>{if(player.x>0){if(e.key=="ArrowLeft"){player.x-=player.w
+if(collisionDetect(player,blocks)==!0){player.x+=player.w}}}else{}
+if(player.y>0){if(e.key=="ArrowUp"){player.y-=player.h
+if(collisionDetect(player,blocks)==!0){player.y+=player.h}}}else{}
+if(player.x<canvas.width-player.w){if(e.key=="ArrowRight"){player.x+=player.w
+if(collisionDetect(player,blocks)==!0){player.x-=player.w}}}else{}
+if(player.y<canvas.height-player.h*2){if(e.key=="ArrowDown"){player.y+=player.h
+if(collisionDetect(player,blocks)==!0){player.y-=player.h}}}else{}
+if(e.key=="D"){if(dPressCount==0){debug=!0
+dPressCount++}else{debug=!1;dPressCount=0}}})
+let player=new Player("",canvas.width/inverseScale,canvas.width/inverseScale,0,0,0,0,0,!0,!1);let debug=!1;let dPressCount=0;let blocks=[]
+for(let j=0;j<inverseScale/2-1;j++){if(j%2!=0){for(let i=0;i<inverseScale-2;i++){if(i%2!=0){blocks.push(new Item("",canvas.width/inverseScale,canvas.width/inverseScale,(canvas.width/inverseScale)*i,(canvas.width/inverseScale)*j,0,0,0,!1,!1,!1))}}}}
+for(let i=1;i<inverseScale-2;i++){if(i%2==0){blocks.push(new Item("",canvas.width/inverseScale,canvas.width/inverseScale,(canvas.width/inverseScale)*i,(canvas.width/inverseScale)*1,0,0,0,!1,!1,!1))}}
+for(let i=1;i<inverseScale-4;i++){if(i%2==0){blocks.push(new Item("",canvas.width/inverseScale,canvas.width/inverseScale,(canvas.width/inverseScale)*i,(canvas.width/inverseScale)*((inverseScale/2)-3),0,0,0,!1,!1,!1))}}
+for(let i=3;i<(inverseScale/2)-3;i++){if(i%2==0){blocks.push(new Item("",canvas.width/inverseScale,canvas.width/inverseScale,(canvas.width/inverseScale)*1,(canvas.width/inverseScale)*i,0,0,0,!1,!1,!1))}}
+for(let i=2;i<(inverseScale/2)-3;i++){if(i%2==0){blocks.push(new Item("",canvas.width/inverseScale,canvas.width/inverseScale,(canvas.width/inverseScale)*(inverseScale-3),(canvas.width/inverseScale)*i,0,0,0,!1,!1,!1))}}
+let colliding=!1;let gameLoop=()=>{ctx.fillStyle="white";ctx.fillRect(0,0,canvas.width,canvas.height);if(debug==!0){debugRender()}
+for(let i=0;i<blocks.length;i++){blocks[i].render(ctx)}
+player.render(ctx)
+requestAnimationFrame(gameLoop)}
+requestAnimationFrame(gameLoop)
